@@ -1,0 +1,23 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'company_response_object.dart';
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+_$CompanyResponseObjectImpl _$$CompanyResponseObjectImplFromJson(
+        Map<String, dynamic> json) =>
+    _$CompanyResponseObjectImpl(
+      name: json['name'] as String,
+      catchPhrase: json['catchPhrase'] as String,
+      bs: json['bs'] as String,
+    );
+
+Map<String, dynamic> _$$CompanyResponseObjectImplToJson(
+        _$CompanyResponseObjectImpl instance) =>
+    <String, dynamic>{
+      'name': instance.name,
+      'catchPhrase': instance.catchPhrase,
+      'bs': instance.bs,
+    };
