@@ -10,10 +10,13 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_svg: ^2.0.16
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  build_runner: ^2.4.8
+  flutter_gen_runner: ^5.4.0
   flutter_lints: ^4.0.0
 
 # For information on the generic Dart part of this file, see the
@@ -21,7 +24,7 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-
+  generate: true
   # To add assets to your package, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
@@ -52,3 +55,11 @@ flutter:
   #
   # For details regarding fonts in packages, see
   # https://flutter.dev/to/font-from-package
+
+
+flutter_gen:
+  assets:
+    outputs:
+      package_parameter_enabled: true
+  integrations:
+    flutter_svg: true
