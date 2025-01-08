@@ -1,4 +1,4 @@
-import 'package:chucker_flutter/chucker_flutter.dart';
+// import 'package:chucker_flutter/chucker_flutter.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +19,7 @@ class _AppState extends State<App> {
   final apiClient = ApiClient(
     isRelease: kReleaseMode,
     interceptors: [
-      if (!kReleaseMode) ChuckerChopperInterceptor(),
+      // if (!kReleaseMode) ChuckerChopperInterceptor(),
     ],
   );
 

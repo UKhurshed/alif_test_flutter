@@ -39,8 +39,9 @@ dependencies:
   flutter_bloc: ^8.1.6
   bloc: ^8.1.4
   shimmer: ^3.0.0
-  chucker_flutter: ^1.8.3
+#  chucker_flutter: ^1.6.3
   logging: ^1.3.0
+  freezed_annotation: ^2.4.4
 
   api:
     path: packages/api
@@ -58,7 +59,8 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   go_router_builder: any
-  build_runner: any
+  build_runner: ^2.4.12
+  freezed: ^2.5.7
   build_verify: any
 
   # The "flutter_lints" package below contains a set of recommended lints to

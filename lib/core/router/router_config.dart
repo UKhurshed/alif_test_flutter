@@ -1,4 +1,4 @@
-import 'package:chucker_flutter/chucker_flutter.dart';
+// import 'package:chucker_flutter/chucker_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/foundation.dart';
 
@@ -9,7 +9,7 @@ final config = GoRouter(
   initialLocation: '/users',
   debugLogDiagnostics: !kReleaseMode,
   observers: [
-    ChuckerFlutter.navigatorObserver,
+    // ChuckerFlutter.navigatorObserver,
   ],
   routes: $appRoutes, //$appRoutes,
 );
