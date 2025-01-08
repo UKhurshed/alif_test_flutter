@@ -42,6 +42,7 @@ dependencies:
 #  chucker_flutter: ^1.6.3
   logging: ^1.3.0
   freezed_annotation: ^2.4.4
+  yandex_mapkit: ^4.1.0
 
   api:
     path: packages/api

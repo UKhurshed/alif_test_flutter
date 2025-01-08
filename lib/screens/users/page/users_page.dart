@@ -80,6 +80,10 @@ class _UsersView extends StatelessWidget {
                                   TextButton(
                                     onPressed: () {
                                       log('location');
+                                      UserLocationRoute(
+                                        lat: item.address.lat,
+                                        lng: item.address.lng,
+                                      ).push(context);
                                     },
                                     child: const Row(
                                       mainAxisSize: MainAxisSize.min,

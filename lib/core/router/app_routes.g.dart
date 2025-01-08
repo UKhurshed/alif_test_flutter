@@ -20,6 +20,11 @@ RouteBase get $usersRoute => GoRouteData.$route(
           name: 'user_posts',
           factory: $UserPostsRouteExtension._fromState,
         ),
+        GoRouteData.$route(
+          path: 'user_location/:lat/:lng',
+          name: 'user_location',
+          factory: $UserLocationRouteExtension._fromState,
+        ),
       ],
     );
 
@@ -47,6 +52,26 @@ extension $UserPostsRouteExtension on UserPostsRoute {
 
   String get location => GoRouteData.$location(
         '/users/users/${Uri.encodeComponent(userID.toString())}',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $UserLocationRouteExtension on UserLocationRoute {
+  static UserLocationRoute _fromState(GoRouterState state) => UserLocationRoute(
+        lat: state.pathParameters['lat']!,
+        lng: state.pathParameters['lng']!,
+      );
+
+  String get location => GoRouteData.$location(
+        '/users/user_location/${Uri.encodeComponent(lat)}/${Uri.encodeComponent(lng)}',
       );
 
   void go(BuildContext context) => context.go(location);
