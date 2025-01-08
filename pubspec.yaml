@@ -44,15 +44,22 @@ dependencies:
 
   api:
     path: packages/api
+  database:
+    path: packages/database
   domain:
     path: packages/domain
   repository:
     path: packages/repository
+  ui_kit:
+    path: packages/ui_kit
 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  go_router_builder: any
+  build_runner: any
+  build_verify: any
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
