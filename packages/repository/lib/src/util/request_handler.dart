@@ -59,15 +59,15 @@ typedef ErrorMapper = Mapper<Object?, DataSourceException>;
 //   Mapper<S, T> mapper, {
 //   ErrorMapper? errorMapper,
 // }) async {
-//   final response = await callback();
-//   if (response.isSuccessful) {
-//     return mapper(response.body as S);
+//   final responses = await callback();
+//   if (responses.isSuccessful) {
+//     return mapper(responses.body as S);
 //   }
 //
 //   apiLog.info('errorMapper: ${errorMapper.toString()}');
 //   final effectiveErrorMapper = errorMapper ?? RequestHandler.errorMapper;
-//   apiLog.info('effectiveErrorMapper: ${effectiveErrorMapper(response.error)}');
-//   throw effectiveErrorMapper(response.error);
+//   apiLog.info('effectiveErrorMapper: ${effectiveErrorMapper(responses.error)}');
+//   throw effectiveErrorMapper(responses.error);
 // }
 
 Future<T> handleRequest<S, T>(

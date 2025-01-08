@@ -19,12 +19,23 @@ final class _$UsersService extends UsersService {
 
   @override
   Future<Response<List<UsersResponse>>> users() {
-    final Uri $url = Uri.parse('/users');
+    final Uri $url = Uri.parse('users/');
     final Request $request = Request(
       'GET',
       $url,
       client.baseUrl,
     );
     return client.send<List<UsersResponse>, UsersResponse>($request);
+  }
+
+  @override
+  Future<Response<List<UserPostResponse>>> userPosts(int userId) {
+    final Uri $url = Uri.parse('users/${userId}/posts');
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+    );
+    return client.send<List<UserPostResponse>, UserPostResponse>($request);
   }
 }
