@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:alif_test/screens/user_location/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -34,11 +32,6 @@ class _UserLocationPageState extends State<UserLocationPage> {
   final animation =
       const MapAnimation(type: MapAnimationType.smooth, duration: 0.2);
 
-  final placeMark = MapObjectCollection(
-    mapId: const MapObjectId('user_location_marker'),
-    mapObjects: [],
-  );
-
   _initializeLocation() {
     final point = Point(
       latitude: double.parse(lat),
@@ -46,7 +39,6 @@ class _UserLocationPageState extends State<UserLocationPage> {
     );
 
     setState(() {
-      log('Assets.images.location.path: ${Assets.images.location.path}');
 
       _userMarker = PlacemarkMapObject(
         mapId: const MapObjectId('user_location_marker'),

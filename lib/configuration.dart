@@ -5,7 +5,8 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
 
-Future<void> init() async {
+
+Future<void> initialize() async {
   _initLogging();
 }
 
