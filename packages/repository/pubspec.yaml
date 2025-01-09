@@ -13,6 +13,8 @@ dependencies:
     path: ../api
   domain:
     path: ../domain
+  database:
+    path: ../database
 
 dev_dependencies:
   flutter_test:

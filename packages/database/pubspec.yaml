@@ -10,11 +10,22 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  drift: ^2.23.1
+  drift_flutter: ^0.2.4
+  path_provider: ^2.1.5
+  path: ^1.9.0
+  sqlite3_flutter_libs: ^0.5.28
+  sqlite3: ^2.5.0
+
+  domain:
+    path: ../domain
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^4.0.0
+  build_runner: ^2.4.12
+  drift_dev: ^2.23.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

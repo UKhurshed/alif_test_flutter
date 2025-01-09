@@ -1,4 +1,5 @@
 // import 'package:chucker_flutter/chucker_flutter.dart';
+import 'package:database/database.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -23,13 +24,18 @@ class _AppState extends State<App> {
     ],
   );
 
+  late final appDatabase = AppDatabase();
+
   late final usersRepository = UsersRepositoryImpl(
     usersService: apiClient.getService(),
+    appDatabase: appDatabase,
   );
 
   late final postsRepository = PostsRepositoryImpl(
     postsService: apiClient.getService(),
   );
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +43,7 @@ class _AppState extends State<App> {
       providers: [
         RepositoryProvider<UsersRepository>.value(value: usersRepository),
         RepositoryProvider<PostsRepository>.value(value: postsRepository),
+        RepositoryProvider<AppDatabase>.value(value: appDatabase),
       ],
       child: Builder(
         builder: (context) {
