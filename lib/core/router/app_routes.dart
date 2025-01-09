@@ -1,4 +1,4 @@
-import 'package:alif_test/screens/user_location_map/page/user_location_map_page.dart';
+import 'package:alif_test/screens/user_location/page/user_location_page.dart';
 import 'package:alif_test/screens/user_posts/page/user_posts_page.dart';
 import 'package:alif_test/screens/users/page/users_page.dart';
 import 'package:flutter/material.dart';

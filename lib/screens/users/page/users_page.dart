@@ -43,6 +43,34 @@ class _UsersView extends StatelessWidget {
               ResultBuilderImpl(
                 result: usersResult,
                 loadingBuilder: (context) => const UsersSkeletonView(),
+                errorBuilder: (context, exception, trace) {
+                  final DataSourceException failure =
+                      exception as DataSourceException;
+                  return SliverToBoxAdapter(
+                    child: Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            failure.message,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(
+                                    color: Theme.of(context).colorScheme.error),
+                          ),
+                          const SizedBox(height: 8),
+                          TextButton(
+                            onPressed: () {
+                              context.read<UsersCubit>().getUsers();
+                            },
+                            child: const Text('Retry again'),
+                          )
+                        ],
+                      ),
+                    ),
+                  );
+                },
                 successBuilder: (context, data) {
                   return SliverList(
                     delegate: SliverChildBuilderDelegate(
@@ -131,7 +159,7 @@ class UsersSkeletonView extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: const SizedBox(
-                  height: 60,
+                  height: 120,
                 ),
               ),
             ),

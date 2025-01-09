@@ -71,20 +71,25 @@ typedef ErrorMapper = Mapper<Object?, DataSourceException>;
 // }
 
 Future<T> handleRequest<S, T>(
-    Request<S> callback,
-    Mapper<S, T> mapper,
-    ) async {
+  Request<S> callback,
+  Mapper<S, T> mapper,
+) async {
   try {
     final response = await callback();
     if (response.isSuccessful) {
       return mapper(response.body as S);
     }
-    throw unsuccessfulResponse(response);
+    throw failureResponse(response);
   } on Exception catch (_) {
     rethrow;
   }
 }
 
+DataSourceException failureResponse<T>(Response<T> response) =>
+    DataSourceException(
+      statusCode: response.statusCode,
+      message: response.toString(),
+    );
 
 UnsuccessfulResponseException unsuccessfulResponse<T>(Response<T> response) =>
     UnsuccessfulResponseException(
