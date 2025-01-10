@@ -36,7 +36,9 @@ class UsersRepositoryImpl implements UsersRepository {
   }
 
   @override
-  Future<List<UserPost>> getUserPosts({required int userID}) async {
+  Future<List<UserPost>> getUserPosts({
+    required int userID,
+  }) async {
     final response =
         await handleRequest<List<UserPostResponse>, List<UserPost>>(
       () => _service.userPosts(userID),

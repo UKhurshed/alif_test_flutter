@@ -1,3 +1,4 @@
+import 'package:alif_test/core/router/app_routes.dart';
 import 'package:alif_test/core/utils/result/result_builder_impl.dart';
 import 'package:alif_test/core/widgets/widgets.dart';
 import 'package:alif_test/screens/user_posts/cubit/user_posts_cubit.dart';
@@ -57,17 +58,24 @@ class _UserPostsView extends StatelessWidget {
                       (context, index) {
                         return Padding(
                           padding: const EdgeInsets.symmetric(vertical: 8),
-                          child: Card(
-                            child: ListTile(
-                              title: Text(
-                                data[index].title,
-                                style: Theme.of(context).textTheme.titleMedium,
+                          child: InkWell(
+                            onTap: () {
+                              PostCommentsRoute(postID: data[index].id)
+                                  .push(context);
+                            },
+                            child: Card(
+                              child: ListTile(
+                                title: Text(
+                                  data[index].title,
+                                  style:
+                                      Theme.of(context).textTheme.titleMedium,
+                                ),
+                                subtitle: Text(
+                                  data[index].body,
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                ),
+                                // contentPadding: EdgeInsets.zero,
                               ),
-                              subtitle: Text(
-                                data[index].body,
-                                style: Theme.of(context).textTheme.bodyMedium,
-                              ),
-                              // contentPadding: EdgeInsets.zero,
                             ),
                           ),
                         );

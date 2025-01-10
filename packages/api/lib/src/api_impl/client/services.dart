@@ -4,4 +4,5 @@ import 'package:chopper/chopper.dart';
 List<ChopperService> services = [
   UsersService.create(),
   PostsService.create(),
+  CommentsService.create(),
 ];

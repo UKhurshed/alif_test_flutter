@@ -16,9 +16,14 @@ RouteBase get $usersRoute => GoRouteData.$route(
       factory: $UsersRouteExtension._fromState,
       routes: [
         GoRouteData.$route(
-          path: 'users/:userID',
+          path: 'users_post/:userID',
           name: 'user_posts',
           factory: $UserPostsRouteExtension._fromState,
+        ),
+        GoRouteData.$route(
+          path: 'post_comments/:postID',
+          name: 'post_comments',
+          factory: $PostCommentsRouteExtension._fromState,
         ),
         GoRouteData.$route(
           path: 'user_location/:lat/:lng',
@@ -51,7 +56,26 @@ extension $UserPostsRouteExtension on UserPostsRoute {
       );
 
   String get location => GoRouteData.$location(
-        '/users/users/${Uri.encodeComponent(userID.toString())}',
+        '/users/users_post/${Uri.encodeComponent(userID.toString())}',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $PostCommentsRouteExtension on PostCommentsRoute {
+  static PostCommentsRoute _fromState(GoRouterState state) => PostCommentsRoute(
+        postID: int.parse(state.pathParameters['postID']!),
+      );
+
+  String get location => GoRouteData.$location(
+        '/users/post_comments/${Uri.encodeComponent(postID.toString())}',
       );
 
   void go(BuildContext context) => context.go(location);

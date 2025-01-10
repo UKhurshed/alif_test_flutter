@@ -47,3 +47,12 @@ extension UserItemFromDBMapper on List<UserDBItem> {
         ),
       );
 }
+
+extension CreateUserPostItemMapper on UserPostResponse {
+  UserPost get asDomainEntity => UserPost(
+        id: id,
+        userID: userID,
+        title: title,
+        body: body,
+      );
+}

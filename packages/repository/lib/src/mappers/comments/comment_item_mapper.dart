@@ -13,3 +13,13 @@ extension CommentItemMapper on List<CommentResponse> {
         ),
       );
 }
+
+extension CommentUpdateItemMapper on CommentResponse {
+  CommentItem get asDomainEntity => CommentItem(
+        id: id,
+        postID: postID,
+        body: body,
+        email: email,
+        name: name,
+      );
+}

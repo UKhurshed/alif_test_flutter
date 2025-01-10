@@ -1,3 +1,4 @@
+import 'package:alif_test/screens/post_comments/page/post_comments_page.dart';
 import 'package:alif_test/screens/user_location/page/user_location_page.dart';
 import 'package:alif_test/screens/user_posts/page/user_posts_page.dart';
 import 'package:alif_test/screens/users/page/users_page.dart';
@@ -13,8 +14,12 @@ final rootNavigatorKey = GlobalKey<NavigatorState>();
   name: UsersPage.routeName,
   routes: [
     TypedGoRoute<UserPostsRoute>(
-      path: 'users/:userID',
+      path: 'users_post/:userID',
       name: UserPostsPage.routeName,
+    ),
+    TypedGoRoute<PostCommentsRoute>(
+      path: 'post_comments/:postID',
+      name: PostCommentsPage.routeName,
     ),
     TypedGoRoute<UserLocationRoute>(
       path: 'user_location/:lat/:lng',
@@ -41,6 +46,22 @@ class UserPostsRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return UserPostsPage(userID: userID.toString());
+  }
+}
+
+@immutable
+class PostCommentsRoute extends GoRouteData {
+  final int postID;
+
+  const PostCommentsRoute({
+    required this.postID,
+  });
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return PostCommentsPage(
+      postID: postID.toString(),
+    );
   }
 }
 

@@ -18,9 +18,9 @@ final class _$CommentsService extends CommentsService {
   final Type definitionType = CommentsService;
 
   @override
-  Future<Response<UserPostResponse>> updatePostComment(
+  Future<Response<CommentResponse>> updatePostComment(
     int commentID,
-    UpdateUserPostRequestBody body,
+    UpdatePostCommentRequestBody body,
   ) {
     final Uri $url = Uri.parse('comments/${commentID}');
     final $body = body;
@@ -30,7 +30,7 @@ final class _$CommentsService extends CommentsService {
       client.baseUrl,
       body: $body,
     );
-    return client.send<UserPostResponse, UserPostResponse>($request);
+    return client.send<CommentResponse, CommentResponse>($request);
   }
 
   @override

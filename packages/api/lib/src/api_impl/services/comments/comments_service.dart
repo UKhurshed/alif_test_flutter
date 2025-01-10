@@ -9,9 +9,9 @@ abstract class CommentsService extends ChopperService {
       _$CommentsService(client);
 
   @Put(path: '{commentId}')
-  Future<Response<UserPostResponse>> updatePostComment(
+  Future<Response<CommentResponse>> updatePostComment(
     @Path('commentId') int commentID,
-    @Body() UpdateUserPostRequestBody body,
+    @Body() UpdatePostCommentRequestBody body,
   );
 
   @Delete(path: '{commentId}')
