@@ -8,7 +8,7 @@ part 'comment_response.g.dart';
 class CommentResponse with _$CommentResponse {
   const factory CommentResponse({
     @JsonKey(name: 'id') required int id,
-    @JsonKey(name: 'postId') required int postID,
+    @JsonKey(name: 'postId') required dynamic postID,
     @JsonKey(name: 'name') required String name,
     @JsonKey(name: 'email') required String email,
     @JsonKey(name: 'body') required String body,

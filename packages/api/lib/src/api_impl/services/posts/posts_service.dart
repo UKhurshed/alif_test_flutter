@@ -29,7 +29,7 @@ abstract class PostsService extends ChopperService {
   );
 
   @Post(path: '{postId}/comments')
-  Future<Response<CreateCommentResponse>> createPostComment(
+  Future<Response<CommentResponse>> createPostComment(
     @Path('postId') int postID,
     @Body() CreatePostCommentRequestBody body,
   );

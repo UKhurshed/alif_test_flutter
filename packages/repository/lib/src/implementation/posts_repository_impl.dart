@@ -41,7 +41,8 @@ class PostsRepositoryImpl implements PostsRepository {
     required int postID,
     required CreatePostComment createPostComment,
   }) async {
-    final response = await handleRequest<CreateCommentResponse, CommentItem>(
+
+    final response = await handleRequest<CommentResponse, CommentItem>(
       () => _postsService.createPostComment(
         postID,
         CreatePostCommentRequestBody(

@@ -15,20 +15,10 @@ extension CommentItemMapper on List<CommentResponse> {
       );
 }
 
-extension CreateCommentItem on CreateCommentResponse {
-  CommentItem get asDomainEntity => CommentItem(
-        postID: int.parse(postID),
-        id: id,
-        name: name,
-        email: email,
-        body: body,
-      );
-}
-
 extension CommentUpdateItemMapper on CommentResponse {
   CommentItem get asDomainEntity => CommentItem(
         id: id,
-        postID: postID,
+        postID: int.parse(postID),
         body: body,
         email: email,
         name: name,
