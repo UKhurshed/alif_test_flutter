@@ -1,3 +1,40 @@
 {
-  "title": "AlifTest"
+  "title": "AlifTest",
+  "users": "Users",
+  "userLocation": "User Location",
+  "userPosts": "User #{userID} posts",
+  "@userPosts": {
+    "description": "Show user ID",
+    "placeholders": {
+      "userID": {
+        "type": "num",
+        "format": "compact"
+      }
+    }
+  },
+  "editUserPost": "Edit user post",
+  "createUserPost": "Create user post",
+  "doYouReallyWantToDeleteThisPost": "Do you really want to delete this post?",
+  "delete": "Delete",
+  "back": "Back",
+  "update": "Update",
+  "create": "Create",
+  "postComments": "Post #{postID} comments",
+  "@postComments": {
+    "description": "Show post ID",
+    "placeholders": {
+      "postID": {
+        "type": "num",
+        "format": "compact"
+      }
+    }
+  },
+  "editPostComment": "Edit post comment",
+  "createPostComment": "Create post comment",
+  "doYouReallyWantToDeleteThisComment": "Do you really want to delete this comment?",
+  "errorOccurred": "Error occurred",
+  "retryAgain": "Retry again",
+  "chooseLanguage": "Choose language",
+  "russian": "Russian",
+  "english": "English"
 }

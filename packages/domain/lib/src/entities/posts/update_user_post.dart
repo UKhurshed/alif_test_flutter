@@ -14,5 +14,10 @@ class UpdateUserPost extends Equatable {
   });
 
   @override
-  List<Object?> get props => [id, userID, title, body,];
+  List<Object?> get props => [
+        id,
+        userID,
+        title,
+        body,
+      ];
 }

@@ -1,3 +1,40 @@
 {
-  "title": "AlifTest"
+  "title": "AlifTest",
+  "users": "Пользователи",
+  "userLocation": "Местоположение пользователя",
+  "userPosts": "Посты пользователя #{userID}",
+  "@userPosts": {
+    "description": "Показать ID пользователя",
+    "placeholders": {
+      "userID": {
+        "type": "num",
+        "format": "compact"
+      }
+    }
+  },
+  "editUserPost": "Редактировать пост пользователя",
+  "createUserPost": "Создать сообщение пользователя",
+  "doYouReallyWantToDeleteThisPost": "Вы действительно хотите удалить этот пост?",
+  "delete": "Удалить",
+  "back": "Назад",
+  "update": "Обновить",
+  "create": "Создать",
+  "postComments": "Комменты поста #{postID}",
+  "@postComments": {
+    "description": "Показать ID поста",
+    "placeholders": {
+      "postID": {
+        "type": "num",
+        "format": "compact"
+      }
+    }
+  },
+  "editPostComment": "Редактировать комментарий к посту",
+  "createPostComment": "Создать комментарий к посту",
+  "doYouReallyWantToDeleteThisComment": "Вы действительно хотите удалить этот комментарий?",
+  "errorOccurred": "Произошла ошибка",
+  "retryAgain": "Повторите попытку еще раз",
+  "chooseLanguage": "Выберите язык",
+  "russian": "Русский",
+  "english": "Английский"
 }

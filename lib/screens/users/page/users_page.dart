@@ -2,11 +2,14 @@ import 'dart:developer';
 
 import 'package:alif_test/core/router/app_routes.dart';
 import 'package:alif_test/core/utils/result/result_builder_impl.dart';
+import 'package:alif_test/core/utils/utils.dart';
 import 'package:alif_test/core/widgets/widgets.dart';
-import 'package:alif_test/screens/users/cubit/users_cubit.dart';
+import 'package:alif_test/screens/users/cubit/app_settings/app_settings_cubit.dart';
+import 'package:alif_test/screens/users/cubit/users/users_cubit.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ui_kit/gen/assets.gen.dart';
 
 class UsersPage extends StatelessWidget {
   const UsersPage({super.key});
@@ -31,9 +34,18 @@ class _UsersView extends StatelessWidget {
   Widget build(BuildContext context) {
     final usersResult =
         context.select((UsersCubit cubit) => cubit.state.usersResult);
+    final s = S.of(context);
     return Scaffold(
-      appBar: const EmptyAppBar(
-        title: 'Users',
+      appBar: EmptyAppBar(
+        title: s.users,
+        actions: [
+          IconButton(
+            onPressed: () async {
+              await showLanguageModalSheet(context);
+            },
+            icon: const Icon(Icons.language),
+          )
+        ],
       ),
       body: SafeArea(
         child: Padding(
@@ -42,33 +54,13 @@ class _UsersView extends StatelessWidget {
             slivers: [
               ResultBuilderImpl(
                 result: usersResult,
-                loadingBuilder: (context) => const UsersSkeletonView(),
+                loadingBuilder: (context) => const DefaultSkeletonView(),
                 errorBuilder: (context, exception, trace) {
-                  final DataSourceException failure =
-                      exception as DataSourceException;
-                  return SliverToBoxAdapter(
-                    child: Center(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            failure.message,
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium
-                                ?.copyWith(
-                                    color: Theme.of(context).colorScheme.error),
-                          ),
-                          const SizedBox(height: 8),
-                          TextButton(
-                            onPressed: () {
-                              context.read<UsersCubit>().getUsers();
-                            },
-                            child: const Text('Retry again'),
-                          )
-                        ],
-                      ),
-                    ),
+                  return ErrorBuilderView(
+                    exception: exception,
+                    onPressed: () {
+                      context.read<UsersCubit>().getUsers();
+                    },
                   );
                 },
                 successBuilder: (context, data) {
@@ -107,18 +99,17 @@ class _UsersView extends StatelessWidget {
                                   ),
                                   TextButton(
                                     onPressed: () {
-                                      log('location');
                                       UserLocationRoute(
                                         lat: item.address.lat,
                                         lng: item.address.lng,
                                       ).push(context);
                                     },
-                                    child: const Row(
+                                    child: Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        Icon(Icons.location_on),
-                                        SizedBox(width: 4),
-                                        Text('User Location')
+                                        const Icon(Icons.location_on),
+                                        const SizedBox(width: 4),
+                                        Text(s.userLocation)
                                       ],
                                     ),
                                   )
@@ -141,30 +132,94 @@ class _UsersView extends StatelessWidget {
   }
 }
 
-class UsersSkeletonView extends StatelessWidget {
-  const UsersSkeletonView({super.key});
+Future<void> showLanguageModalSheet(BuildContext context) async {
+  await showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        final s = S.of(context);
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 16,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(s.chooseLanguage),
+                const SizedBox(height: 16),
+                BlocBuilder<AppSettingsCubit, AppSettingsState>(
+                  builder: (context, state) {
+                    return ListView.separated(
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        final bool isSelected = state.appLanguage.index ==
+                            AppLanguage.values[index].index;
+                        return InkWell(
+                          borderRadius: BorderRadius.circular(8),
+                          onTap: () {
+                            context
+                                .read<AppSettingsCubit>()
+                                .setLanguage(AppLanguage.values[index].locale);
+                          },
+                          child: LanguageItem(
+                            title: index == 0 ? s.russian : s.english, //Тоҷикӣ
+                            icon:
+                                index == 0 ? Assets.icons.ru : Assets.icons.us,
+                            isSelected: isSelected,
+                          ),
+                        );
+                      },
+                      separatorBuilder: (context, index) =>
+                          const SizedBox(height: 16),
+                      itemCount: AppLanguage.values.length,
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      });
+}
+
+class LanguageItem extends StatelessWidget {
+  const LanguageItem({
+    super.key,
+    required this.title,
+    required this.icon,
+    required this.isSelected,
+  });
+
+  final String title;
+  final SvgGenImage icon;
+  final bool isSelected;
 
   @override
   Widget build(BuildContext context) {
-    return SliverList(
-      delegate: SliverChildListDelegate(
-        List.generate(
-          5,
-          (value) => Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            child: DefaultShimmer(
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: Colors.grey,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: const SizedBox(
-                  height: 120,
-                ),
-              ),
-            ),
-          ),
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: isSelected
+            ? Theme.of(context).primaryColor.withOpacity(0.85)
+            : Colors.white,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: ListTile(
+        leading: icon.svg(height: 23, width: 23),
+        title: Text(
+          title,
+          style: Theme.of(context)
+              .textTheme
+              .titleMedium
+              ?.copyWith(color: isSelected ? Colors.white : Colors.black),
         ),
+        trailing: isSelected
+            ? const Icon(
+                Icons.verified,
+                color: Colors.lightGreenAccent,
+              )
+            : null,
       ),
     );
   }

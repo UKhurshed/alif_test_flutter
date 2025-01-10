@@ -1,7 +1,9 @@
 import 'package:domain/domain.dart';
 
 abstract class PostsRepository {
-  Future<List<CommentItem>> getCommentsByPostID(int postID);
+  Future<List<CommentItem>> getCommentsByPostID({required int postID});
+
+  Stream<List<CommentItem>> watchComments({required int postID});
 
   Future<UserPost> createUserPost({
     required CreateUserPost createUserPost,
@@ -9,10 +11,12 @@ abstract class PostsRepository {
 
   Future<UserPost> updateUserPost({
     required int postID,
-    required UpdateUserPost updateUserPost,
+    required UserPost updateUserPost,
   });
 
-  Future<void> deleteUserPost({required int postID});
+  Future<void> deleteUserPost({
+    required int postID,
+  });
 
   Future<CommentItem> createPostComment({
     required int postID,

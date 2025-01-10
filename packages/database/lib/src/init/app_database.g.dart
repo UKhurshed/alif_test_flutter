@@ -877,7 +877,10 @@ class $PostDbCommentsTable extends PostDbComments
   @override
   late final GeneratedColumn<int> postID = GeneratedColumn<int>(
       'post_i_d', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES user_d_b_posts (id)'));
   static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
@@ -1156,6 +1159,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $PostDbCommentsTable postDbComments = $PostDbCommentsTable(this);
   late final UserItemsDao userItemsDao = UserItemsDao(this as AppDatabase);
   late final UserPostsDao userPostsDao = UserPostsDao(this as AppDatabase);
+  late final PostCommentsDao postCommentsDao =
+      PostCommentsDao(this as AppDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -1460,6 +1465,26 @@ typedef $$UserDBPostsTableUpdateCompanionBuilder = UserDBPostsCompanion
   Value<String> body,
 });
 
+final class $$UserDBPostsTableReferences
+    extends BaseReferences<_$AppDatabase, $UserDBPostsTable, UserDBPost> {
+  $$UserDBPostsTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static MultiTypedResultKey<$PostDbCommentsTable, List<PostDbComment>>
+      _postDbCommentsRefsTable(_$AppDatabase db) =>
+          MultiTypedResultKey.fromTable(db.postDbComments,
+              aliasName: $_aliasNameGenerator(
+                  db.userDBPosts.id, db.postDbComments.postID));
+
+  $$PostDbCommentsTableProcessedTableManager get postDbCommentsRefs {
+    final manager = $$PostDbCommentsTableTableManager($_db, $_db.postDbComments)
+        .filter((f) => f.postID.id($_item.id));
+
+    final cache = $_typedResult.readTableOrNull(_postDbCommentsRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+}
+
 class $$UserDBPostsTableFilterComposer
     extends Composer<_$AppDatabase, $UserDBPostsTable> {
   $$UserDBPostsTableFilterComposer({
@@ -1480,6 +1505,27 @@ class $$UserDBPostsTableFilterComposer
 
   ColumnFilters<String> get body => $composableBuilder(
       column: $table.body, builder: (column) => ColumnFilters(column));
+
+  Expression<bool> postDbCommentsRefs(
+      Expression<bool> Function($$PostDbCommentsTableFilterComposer f) f) {
+    final $$PostDbCommentsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.postDbComments,
+        getReferencedColumn: (t) => t.postID,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$PostDbCommentsTableFilterComposer(
+              $db: $db,
+              $table: $db.postDbComments,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
 }
 
 class $$UserDBPostsTableOrderingComposer
@@ -1524,6 +1570,27 @@ class $$UserDBPostsTableAnnotationComposer
 
   GeneratedColumn<String> get body =>
       $composableBuilder(column: $table.body, builder: (column) => column);
+
+  Expression<T> postDbCommentsRefs<T extends Object>(
+      Expression<T> Function($$PostDbCommentsTableAnnotationComposer a) f) {
+    final $$PostDbCommentsTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.postDbComments,
+        getReferencedColumn: (t) => t.postID,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$PostDbCommentsTableAnnotationComposer(
+              $db: $db,
+              $table: $db.postDbComments,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
 }
 
 class $$UserDBPostsTableTableManager extends RootTableManager<
@@ -1535,9 +1602,9 @@ class $$UserDBPostsTableTableManager extends RootTableManager<
     $$UserDBPostsTableAnnotationComposer,
     $$UserDBPostsTableCreateCompanionBuilder,
     $$UserDBPostsTableUpdateCompanionBuilder,
-    (UserDBPost, BaseReferences<_$AppDatabase, $UserDBPostsTable, UserDBPost>),
+    (UserDBPost, $$UserDBPostsTableReferences),
     UserDBPost,
-    PrefetchHooks Function()> {
+    PrefetchHooks Function({bool postDbCommentsRefs})> {
   $$UserDBPostsTableTableManager(_$AppDatabase db, $UserDBPostsTable table)
       : super(TableManagerState(
           db: db,
@@ -1573,9 +1640,36 @@ class $$UserDBPostsTableTableManager extends RootTableManager<
             body: body,
           ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map((e) => (
+                    e.readTable(table),
+                    $$UserDBPostsTableReferences(db, table, e)
+                  ))
               .toList(),
-          prefetchHooksCallback: null,
+          prefetchHooksCallback: ({postDbCommentsRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [
+                if (postDbCommentsRefs) db.postDbComments
+              ],
+              addJoins: null,
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (postDbCommentsRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable: $$UserDBPostsTableReferences
+                            ._postDbCommentsRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$UserDBPostsTableReferences(db, table, p0)
+                                .postDbCommentsRefs,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.postID == item.id),
+                        typedResults: items)
+                ];
+              },
+            );
+          },
         ));
 }
 
@@ -1588,9 +1682,9 @@ typedef $$UserDBPostsTableProcessedTableManager = ProcessedTableManager<
     $$UserDBPostsTableAnnotationComposer,
     $$UserDBPostsTableCreateCompanionBuilder,
     $$UserDBPostsTableUpdateCompanionBuilder,
-    (UserDBPost, BaseReferences<_$AppDatabase, $UserDBPostsTable, UserDBPost>),
+    (UserDBPost, $$UserDBPostsTableReferences),
     UserDBPost,
-    PrefetchHooks Function()>;
+    PrefetchHooks Function({bool postDbCommentsRefs})>;
 typedef $$PostDbCommentsTableCreateCompanionBuilder = PostDbCommentsCompanion
     Function({
   Value<int> id,
@@ -1608,6 +1702,25 @@ typedef $$PostDbCommentsTableUpdateCompanionBuilder = PostDbCommentsCompanion
   Value<String> body,
 });
 
+final class $$PostDbCommentsTableReferences
+    extends BaseReferences<_$AppDatabase, $PostDbCommentsTable, PostDbComment> {
+  $$PostDbCommentsTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static $UserDBPostsTable _postIDTable(_$AppDatabase db) =>
+      db.userDBPosts.createAlias(
+          $_aliasNameGenerator(db.postDbComments.postID, db.userDBPosts.id));
+
+  $$UserDBPostsTableProcessedTableManager get postID {
+    final manager = $$UserDBPostsTableTableManager($_db, $_db.userDBPosts)
+        .filter((f) => f.id($_item.postID));
+    final item = $_typedResult.readTableOrNull(_postIDTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+}
+
 class $$PostDbCommentsTableFilterComposer
     extends Composer<_$AppDatabase, $PostDbCommentsTable> {
   $$PostDbCommentsTableFilterComposer({
@@ -1620,9 +1733,6 @@ class $$PostDbCommentsTableFilterComposer
   ColumnFilters<int> get id => $composableBuilder(
       column: $table.id, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get postID => $composableBuilder(
-      column: $table.postID, builder: (column) => ColumnFilters(column));
-
   ColumnFilters<String> get name => $composableBuilder(
       column: $table.name, builder: (column) => ColumnFilters(column));
 
@@ -1631,6 +1741,26 @@ class $$PostDbCommentsTableFilterComposer
 
   ColumnFilters<String> get body => $composableBuilder(
       column: $table.body, builder: (column) => ColumnFilters(column));
+
+  $$UserDBPostsTableFilterComposer get postID {
+    final $$UserDBPostsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.postID,
+        referencedTable: $db.userDBPosts,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$UserDBPostsTableFilterComposer(
+              $db: $db,
+              $table: $db.userDBPosts,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
 }
 
 class $$PostDbCommentsTableOrderingComposer
@@ -1645,9 +1775,6 @@ class $$PostDbCommentsTableOrderingComposer
   ColumnOrderings<int> get id => $composableBuilder(
       column: $table.id, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get postID => $composableBuilder(
-      column: $table.postID, builder: (column) => ColumnOrderings(column));
-
   ColumnOrderings<String> get name => $composableBuilder(
       column: $table.name, builder: (column) => ColumnOrderings(column));
 
@@ -1656,6 +1783,26 @@ class $$PostDbCommentsTableOrderingComposer
 
   ColumnOrderings<String> get body => $composableBuilder(
       column: $table.body, builder: (column) => ColumnOrderings(column));
+
+  $$UserDBPostsTableOrderingComposer get postID {
+    final $$UserDBPostsTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.postID,
+        referencedTable: $db.userDBPosts,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$UserDBPostsTableOrderingComposer(
+              $db: $db,
+              $table: $db.userDBPosts,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
 }
 
 class $$PostDbCommentsTableAnnotationComposer
@@ -1670,9 +1817,6 @@ class $$PostDbCommentsTableAnnotationComposer
   GeneratedColumn<int> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
 
-  GeneratedColumn<int> get postID =>
-      $composableBuilder(column: $table.postID, builder: (column) => column);
-
   GeneratedColumn<String> get name =>
       $composableBuilder(column: $table.name, builder: (column) => column);
 
@@ -1681,6 +1825,26 @@ class $$PostDbCommentsTableAnnotationComposer
 
   GeneratedColumn<String> get body =>
       $composableBuilder(column: $table.body, builder: (column) => column);
+
+  $$UserDBPostsTableAnnotationComposer get postID {
+    final $$UserDBPostsTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.postID,
+        referencedTable: $db.userDBPosts,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$UserDBPostsTableAnnotationComposer(
+              $db: $db,
+              $table: $db.userDBPosts,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
 }
 
 class $$PostDbCommentsTableTableManager extends RootTableManager<
@@ -1692,12 +1856,9 @@ class $$PostDbCommentsTableTableManager extends RootTableManager<
     $$PostDbCommentsTableAnnotationComposer,
     $$PostDbCommentsTableCreateCompanionBuilder,
     $$PostDbCommentsTableUpdateCompanionBuilder,
-    (
-      PostDbComment,
-      BaseReferences<_$AppDatabase, $PostDbCommentsTable, PostDbComment>
-    ),
+    (PostDbComment, $$PostDbCommentsTableReferences),
     PostDbComment,
-    PrefetchHooks Function()> {
+    PrefetchHooks Function({bool postID})> {
   $$PostDbCommentsTableTableManager(
       _$AppDatabase db, $PostDbCommentsTable table)
       : super(TableManagerState(
@@ -1738,9 +1899,46 @@ class $$PostDbCommentsTableTableManager extends RootTableManager<
             body: body,
           ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map((e) => (
+                    e.readTable(table),
+                    $$PostDbCommentsTableReferences(db, table, e)
+                  ))
               .toList(),
-          prefetchHooksCallback: null,
+          prefetchHooksCallback: ({postID = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (postID) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.postID,
+                    referencedTable:
+                        $$PostDbCommentsTableReferences._postIDTable(db),
+                    referencedColumn:
+                        $$PostDbCommentsTableReferences._postIDTable(db).id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
         ));
 }
 
@@ -1753,12 +1951,9 @@ typedef $$PostDbCommentsTableProcessedTableManager = ProcessedTableManager<
     $$PostDbCommentsTableAnnotationComposer,
     $$PostDbCommentsTableCreateCompanionBuilder,
     $$PostDbCommentsTableUpdateCompanionBuilder,
-    (
-      PostDbComment,
-      BaseReferences<_$AppDatabase, $PostDbCommentsTable, PostDbComment>
-    ),
+    (PostDbComment, $$PostDbCommentsTableReferences),
     PostDbComment,
-    PrefetchHooks Function()>;
+    PrefetchHooks Function({bool postID})>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;

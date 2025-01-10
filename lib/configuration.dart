@@ -1,13 +1,16 @@
 import 'dart:developer';
 import 'package:alif_test/core/app_bloc_observer.dart';
-import 'package:bloc/bloc.dart';
-// import 'package:chucker_flutter/chucker_flutter.dart';
 import 'package:flutter/foundation.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:logging/logging.dart';
-
+import 'package:path_provider/path_provider.dart';
 
 Future<void> initialize() async {
   _initLogging();
+
+  HydratedBloc.storage = await HydratedStorage.build(
+    storageDirectory: await getTemporaryDirectory(),
+  );
 }
 
 void _initLogging() {

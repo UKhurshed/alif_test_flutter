@@ -4,15 +4,17 @@ class EmptyAppBar extends StatelessWidget implements PreferredSizeWidget {
   const EmptyAppBar({
     super.key,
     required this.title,
+    required this.actions,
   });
 
   final String title;
+  final List<Widget> actions;
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      centerTitle: true,
       title: Text(title),
+      actions: actions,
     );
   }
 

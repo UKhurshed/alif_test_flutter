@@ -6,4 +6,6 @@ abstract class UsersRepository {
   Future<List<UserPost>> getUserPosts({
     required int userID,
   });
+
+  Stream<List<UserPost>> watchUserPosts({required int userID});
 }

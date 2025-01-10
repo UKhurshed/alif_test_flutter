@@ -70,7 +70,7 @@ final class _$PostsService extends PostsService {
   }
 
   @override
-  Future<Response<CommentResponse>> createPostComment(
+  Future<Response<CreateCommentResponse>> createPostComment(
     int postID,
     CreatePostCommentRequestBody body,
   ) {
@@ -82,6 +82,6 @@ final class _$PostsService extends PostsService {
       client.baseUrl,
       body: $body,
     );
-    return client.send<CommentResponse, CommentResponse>($request);
+    return client.send<CreateCommentResponse, CreateCommentResponse>($request);
   }
 }

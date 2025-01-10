@@ -1,4 +1,5 @@
 import 'package:api/api.dart';
+import 'package:database/database.dart';
 import 'package:domain/domain.dart';
 import 'package:repository/src/mappers/mappers.dart';
 import 'package:repository/src/util/request_handler.dart';
@@ -6,19 +7,33 @@ import 'package:repository/src/util/request_handler.dart';
 class PostsRepositoryImpl implements PostsRepository {
   PostsRepositoryImpl({
     required PostsService postsService,
-  }) : _postsService = postsService;
+    required AppDatabase appDatabase,
+  })  : _postsService = postsService,
+        _appDatabase = appDatabase;
 
   final PostsService _postsService;
+  final AppDatabase _appDatabase;
 
   @override
-  Future<List<CommentItem>> getCommentsByPostID(int postID) async {
-    final response =
-        await handleRequest<List<CommentResponse>, List<CommentItem>>(
-      () => _postsService.commentsByPostId(postID),
-      (input) => input.asDomainEntity,
-    );
-
-    return response;
+  Future<List<CommentItem>> getCommentsByPostID({
+    required int postID,
+  }) async {
+    final postComments =
+        await _appDatabase.postCommentsDao.getPostComments(postID);
+    if (postComments.isEmpty) {
+      final response =
+          await handleRequest<List<CommentResponse>, List<CommentItem>>(
+        () => _postsService.commentsByPostId(postID),
+        (input) {
+          final domainEntity = input.asDomainEntity;
+          _appDatabase.postCommentsDao.insertPostComments(domainEntity);
+          return input.asDomainEntity;
+        },
+      );
+      return response;
+    } else {
+      return postComments.asDomainFromDB;
+    }
   }
 
   @override
@@ -26,7 +41,7 @@ class PostsRepositoryImpl implements PostsRepository {
     required int postID,
     required CreatePostComment createPostComment,
   }) async {
-    final response = await handleRequest<CommentResponse, CommentItem>(
+    final response = await handleRequest<CreateCommentResponse, CommentItem>(
       () => _postsService.createPostComment(
         postID,
         CreatePostCommentRequestBody(
@@ -36,7 +51,17 @@ class PostsRepositoryImpl implements PostsRepository {
           body: createPostComment.body,
         ),
       ),
-      (input) => input.asDomainEntity,
+      (input) {
+        final _ = _appDatabase.postCommentsDao.insertPostComment(
+          CommentItem(
+              postID: postID,
+              id: input.id,
+              name: createPostComment.name,
+              email: createPostComment.email,
+              body: createPostComment.body),
+        );
+        return input.asDomainEntity;
+      },
     );
 
     return response;
@@ -54,6 +79,51 @@ class PostsRepositoryImpl implements PostsRepository {
           body: createUserPost.body,
         ),
       ),
+      (input) {
+        final _ = _appDatabase.userPostsDao.insertUserPost(
+          UserPost(
+              userID: createUserPost.userID,
+              id: input.id,
+              title: createUserPost.title,
+              body: createUserPost.body),
+        );
+        return input.asDomainEntity;
+      },
+    );
+
+    return response;
+  }
+
+  @override
+  Future<void> deleteUserPost({
+    required int postID,
+  }) async {
+    final response = await handleRequest(() {
+      final deleteResult = _postsService.deleteUserPost(postID);
+      return deleteResult;
+    }, (input) async {
+      final _ = await _appDatabase.userPostsDao.deleteUserPostById(postID);
+      return input;
+    });
+    return response;
+  }
+
+  @override
+  Future<UserPost> updateUserPost({
+    required int postID,
+    required UserPost updateUserPost,
+  }) async {
+    _appDatabase.userPostsDao.updatePost(updateUserPost);
+    final response = await handleRequest<UserPostResponse, UserPost>(
+      () => _postsService.updateUserPost(
+        postID,
+        UpdateUserPostRequestBody(
+          title: updateUserPost.title,
+          body: updateUserPost.body,
+          userID: updateUserPost.userID,
+          id: postID,
+        ),
+      ),
       (input) => input.asDomainEntity,
     );
 
@@ -61,29 +131,17 @@ class PostsRepositoryImpl implements PostsRepository {
   }
 
   @override
-  Future<void> deleteUserPost({required int postID}) async {
-    final response = await handleRequest(
-        () => _postsService.deleteUserPost(postID), (input) => input);
-    return response;
-  }
-
-  @override
-  Future<UserPost> updateUserPost({
-    required int postID,
-    required UpdateUserPost updateUserPost,
-  }) async {
-    final response = await handleRequest<UserPostResponse, UserPost>(
-        () => _postsService.updateUserPost(
-              postID,
-              UpdateUserPostRequestBody(
-                title: updateUserPost.title,
-                body: updateUserPost.body,
-                userID: updateUserPost.userID,
-                id: updateUserPost.id,
-              ),
-            ),
-        (input) => input.asDomainEntity);
-
-    return response;
+  Stream<List<CommentItem>> watchComments({required int postID}) {
+    return _appDatabase.postCommentsDao.watchPostComments(postID).map((list) {
+      return list.map((postDBComment) {
+        return CommentItem(
+          postID: postDBComment.postID,
+          id: postDBComment.id,
+          name: postDBComment.name,
+          email: postDBComment.email,
+          body: postDBComment.body,
+        );
+      }).toList();
+    });
   }
 }

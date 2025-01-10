@@ -30,7 +30,7 @@ class UsersRepositoryImpl implements UsersRepository {
       );
       return response;
     } else {
-      log('from DB: $usersFromDB');
+      log('getUsers from DB: $usersFromDB');
       return usersFromDB.asDomainFromDB;
     }
   }
@@ -39,12 +39,38 @@ class UsersRepositoryImpl implements UsersRepository {
   Future<List<UserPost>> getUserPosts({
     required int userID,
   }) async {
-    final response =
-        await handleRequest<List<UserPostResponse>, List<UserPost>>(
-      () => _service.userPosts(userID),
-      (input) => input.asDomainEntity,
-    );
+    final userPostsDB = await _appDatabase.userPostsDao.getUserPost(userID);
+    if (userPostsDB.isEmpty) {
+      final response =
+          await handleRequest<List<UserPostResponse>, List<UserPost>>(
+        () => _service.userPosts(userID),
+        (input) {
+          final domainEntity = input.asDomainEntity;
+          _appDatabase.userPostsDao.insertUserPosts(domainEntity);
+          return input.asDomainEntity;
+        },
+      );
 
-    return response;
+      return response;
+    } else {
+      log('getUserPosts from DB: $userPostsDB');
+      return userPostsDB.asDomainFromDB;
+    }
+  }
+
+  @override
+  Stream<List<UserPost>> watchUserPosts({
+    required int userID,
+  }) {
+    return _appDatabase.userPostsDao.watchUserDBPost(userID).map((list) {
+      return list.map((userDBPosts) {
+        return UserPost(
+          id: userDBPosts.id,
+          title: userDBPosts.title,
+          body: userDBPosts.body,
+          userID: userDBPosts.userID,
+        );
+      }).toList();
+    });
   }
 }

@@ -18,6 +18,11 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$UserPostsState {
   Result<List<UserPost>> get userPostsResult =>
       throw _privateConstructorUsedError;
+  Result<UserPost> get createUserPostResult =>
+      throw _privateConstructorUsedError;
+  Result<UserPost> get updateUserPostResult =>
+      throw _privateConstructorUsedError;
+  Result<void> get deleteUserPostResult => throw _privateConstructorUsedError;
 
   /// Create a copy of UserPostsState
   /// with the given fields replaced by the non-null parameter values.
@@ -32,7 +37,11 @@ abstract class $UserPostsStateCopyWith<$Res> {
           UserPostsState value, $Res Function(UserPostsState) then) =
       _$UserPostsStateCopyWithImpl<$Res, UserPostsState>;
   @useResult
-  $Res call({Result<List<UserPost>> userPostsResult});
+  $Res call(
+      {Result<List<UserPost>> userPostsResult,
+      Result<UserPost> createUserPostResult,
+      Result<UserPost> updateUserPostResult,
+      Result<void> deleteUserPostResult});
 }
 
 /// @nodoc
@@ -51,12 +60,27 @@ class _$UserPostsStateCopyWithImpl<$Res, $Val extends UserPostsState>
   @override
   $Res call({
     Object? userPostsResult = null,
+    Object? createUserPostResult = null,
+    Object? updateUserPostResult = null,
+    Object? deleteUserPostResult = null,
   }) {
     return _then(_value.copyWith(
       userPostsResult: null == userPostsResult
           ? _value.userPostsResult
           : userPostsResult // ignore: cast_nullable_to_non_nullable
               as Result<List<UserPost>>,
+      createUserPostResult: null == createUserPostResult
+          ? _value.createUserPostResult
+          : createUserPostResult // ignore: cast_nullable_to_non_nullable
+              as Result<UserPost>,
+      updateUserPostResult: null == updateUserPostResult
+          ? _value.updateUserPostResult
+          : updateUserPostResult // ignore: cast_nullable_to_non_nullable
+              as Result<UserPost>,
+      deleteUserPostResult: null == deleteUserPostResult
+          ? _value.deleteUserPostResult
+          : deleteUserPostResult // ignore: cast_nullable_to_non_nullable
+              as Result<void>,
     ) as $Val);
   }
 }
@@ -69,7 +93,11 @@ abstract class _$$UserPostsStateImplCopyWith<$Res>
       __$$UserPostsStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Result<List<UserPost>> userPostsResult});
+  $Res call(
+      {Result<List<UserPost>> userPostsResult,
+      Result<UserPost> createUserPostResult,
+      Result<UserPost> updateUserPostResult,
+      Result<void> deleteUserPostResult});
 }
 
 /// @nodoc
@@ -86,12 +114,27 @@ class __$$UserPostsStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? userPostsResult = null,
+    Object? createUserPostResult = null,
+    Object? updateUserPostResult = null,
+    Object? deleteUserPostResult = null,
   }) {
     return _then(_$UserPostsStateImpl(
       userPostsResult: null == userPostsResult
           ? _value.userPostsResult
           : userPostsResult // ignore: cast_nullable_to_non_nullable
               as Result<List<UserPost>>,
+      createUserPostResult: null == createUserPostResult
+          ? _value.createUserPostResult
+          : createUserPostResult // ignore: cast_nullable_to_non_nullable
+              as Result<UserPost>,
+      updateUserPostResult: null == updateUserPostResult
+          ? _value.updateUserPostResult
+          : updateUserPostResult // ignore: cast_nullable_to_non_nullable
+              as Result<UserPost>,
+      deleteUserPostResult: null == deleteUserPostResult
+          ? _value.deleteUserPostResult
+          : deleteUserPostResult // ignore: cast_nullable_to_non_nullable
+              as Result<void>,
     ));
   }
 }
@@ -99,14 +142,25 @@ class __$$UserPostsStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$UserPostsStateImpl extends _UserPostsState {
-  const _$UserPostsStateImpl({required this.userPostsResult}) : super._();
+  const _$UserPostsStateImpl(
+      {required this.userPostsResult,
+      required this.createUserPostResult,
+      required this.updateUserPostResult,
+      required this.deleteUserPostResult})
+      : super._();
 
   @override
   final Result<List<UserPost>> userPostsResult;
+  @override
+  final Result<UserPost> createUserPostResult;
+  @override
+  final Result<UserPost> updateUserPostResult;
+  @override
+  final Result<void> deleteUserPostResult;
 
   @override
   String toString() {
-    return 'UserPostsState._internal(userPostsResult: $userPostsResult)';
+    return 'UserPostsState._internal(userPostsResult: $userPostsResult, createUserPostResult: $createUserPostResult, updateUserPostResult: $updateUserPostResult, deleteUserPostResult: $deleteUserPostResult)';
   }
 
   @override
@@ -115,11 +169,18 @@ class _$UserPostsStateImpl extends _UserPostsState {
         (other.runtimeType == runtimeType &&
             other is _$UserPostsStateImpl &&
             (identical(other.userPostsResult, userPostsResult) ||
-                other.userPostsResult == userPostsResult));
+                other.userPostsResult == userPostsResult) &&
+            (identical(other.createUserPostResult, createUserPostResult) ||
+                other.createUserPostResult == createUserPostResult) &&
+            (identical(other.updateUserPostResult, updateUserPostResult) ||
+                other.updateUserPostResult == updateUserPostResult) &&
+            (identical(other.deleteUserPostResult, deleteUserPostResult) ||
+                other.deleteUserPostResult == deleteUserPostResult));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, userPostsResult);
+  int get hashCode => Object.hash(runtimeType, userPostsResult,
+      createUserPostResult, updateUserPostResult, deleteUserPostResult);
 
   /// Create a copy of UserPostsState
   /// with the given fields replaced by the non-null parameter values.
@@ -133,12 +194,20 @@ class _$UserPostsStateImpl extends _UserPostsState {
 
 abstract class _UserPostsState extends UserPostsState {
   const factory _UserPostsState(
-          {required final Result<List<UserPost>> userPostsResult}) =
-      _$UserPostsStateImpl;
+      {required final Result<List<UserPost>> userPostsResult,
+      required final Result<UserPost> createUserPostResult,
+      required final Result<UserPost> updateUserPostResult,
+      required final Result<void> deleteUserPostResult}) = _$UserPostsStateImpl;
   const _UserPostsState._() : super._();
 
   @override
   Result<List<UserPost>> get userPostsResult;
+  @override
+  Result<UserPost> get createUserPostResult;
+  @override
+  Result<UserPost> get updateUserPostResult;
+  @override
+  Result<void> get deleteUserPostResult;
 
   /// Create a copy of UserPostsState
   /// with the given fields replaced by the non-null parameter values.

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:database/src/init/app_database.dart';
 import 'package:database/src/tables/tables.dart';
 import 'package:domain/domain.dart';
@@ -62,8 +64,10 @@ class UserPostsDao extends DatabaseAccessor<AppDatabase>
 
   //Delete operations
   Future<int> deleteUserPostById(int postID) async {
-    return await (delete(userDBPosts)..where((tbl) => tbl.id.equals(postID)))
-        .go();
+    final result =
+        await (delete(userDBPosts)..where((tbl) => tbl.id.equals(postID))).go();
+    log('delete result: $result');
+    return result;
   }
 
   Future<int> deleteAllUserPosts() async {

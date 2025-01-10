@@ -3,7 +3,7 @@ import 'package:domain/domain.dart';
 abstract class CommentsRepository {
   Future<CommentItem> updatePostComment({
     required int commentID,
-    required UpdatePostComment updatePostComment,
+    required CreatePostComment updatePostComment,
   });
 
   Future<void> deletePostComment({

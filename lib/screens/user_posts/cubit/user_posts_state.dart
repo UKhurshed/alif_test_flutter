@@ -6,9 +6,15 @@ class UserPostsState with _$UserPostsState {
 
   const factory UserPostsState._internal({
     required Result<List<UserPost>> userPostsResult,
+    required Result<UserPost> createUserPostResult,
+    required Result<UserPost> updateUserPostResult,
+    required Result<void> deleteUserPostResult,
   }) = _UserPostsState;
 
-  factory UserPostsState.initial() => UserPostsState._internal(
+  factory UserPostsState.initial() => const UserPostsState._internal(
         userPostsResult: Initial(),
+        createUserPostResult: Initial(),
+        updateUserPostResult: Initial(),
+        deleteUserPostResult: Initial(),
       );
 }
