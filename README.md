@@ -1,16 +1,13 @@
 # alif_test
 
-A new Flutter project.
+Описание задачи:
+1. Создайте приложение для Android и iOS с помощью Flutter, которое отображает информацию, полученную по сети. Base endpoint:https://jsonplaceholder.typicode.com 1. Получите и распечатайте данные, полученные по указанному выше URL. 2. Разберите данные, полученные с сервера, в список объектов. 3. Отображайте ваши объекты в организованном порядке (ListView, GridView и т. д.). 4. Должны отображаться name, email, phone и website. Адрес должен быть показан в отдельном блоке на карте (Google Maps, OpenStreetMap и т. д.). Route: /users 5. При нажатии на user item (#3) показывайте посты данного пользователя. Route: /posts 6. При нажатии на post item (#4) необходимо также парсить и показывать комментарии нажатого поста. Route: /comments 7. Сделайте CRUD операции для всех 3 роутов. При реализации вы можете добавлять фичи, чтобы показать свой уровень. Приветствуется чистый и тестируемый код. Плюсом будет: - Постраничная подгрузка при скролле - Кэширование, чтобы приложение при старте показывало ранее загруженные данные Требования: - Применить "Чистую архитектуру" - Применить Bloc pattern - Использовать базу данных SQLite Загрузите свой код на GitHub и отправьте нам ссылку
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+# Стек:
+GoRouter(TypedStatefulShellRoute)
+Localization(Русский, English)
+FlutterGen(Ассеты, картинки типа Image, Svg)
+Mногомодульная архитектура (Database, API, Domain, Repository)
+Drift для БД
+Bloc/Cubit для State Managment
+Build_Runner и еще несколько связанных пакетов используется для Кодогенерация
